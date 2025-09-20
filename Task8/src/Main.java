@@ -56,7 +56,7 @@ class Forest {
     // статический метод для смены сезона и цвета шерсти
     public static void setSeason(String newSeason) {
         season = newSeason;
-        if ("зима".equals(season)) {
+        if (season.equals("зима")) {
             MountainHare.color = "белый";
         } else {
             MountainHare.color = "серо-рыжий";
