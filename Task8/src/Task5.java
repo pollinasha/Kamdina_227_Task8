@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Practicum {
+public class Task5 {
     // объявите поле для ссылки на карту (англ. map link)
-    ... = "https://recyclemap.ru/";
+    public static final String MAP_LINK = "https://recyclemap.ru/"; //Ссылку на карту нужно хранить как константу
     public static final ArrayList<RecyclableMaterial> materials = getMaterials();
     public static final HashMap<MaterialType, String> containers = getContainers();
 
@@ -13,7 +13,9 @@ public class Practicum {
         printMenu();
 
         String commandValue = scanner.nextLine();
+        //Чтобы перевести введённую команду в тип ChatCommand, используйте метод ChatCommand.valueOf(commandValue)
         /* в зависимости от команды выполните следующие действия:
+
            map - вывести на экран ссылку на карту;
            recyclability - 1. напечатать сообщение "Введите код переработки:",
                            2. добавить ввод кода (целое число),
@@ -24,11 +26,31 @@ public class Practicum {
                        если вес меньше 10 кг, то коэффициент 10, иначе - 15,
                    4. вывести сообщение "Количество бонусных баллов: <баллы>."
         */
+        switch (ChatCommand.valueOf(commandValue)) {
+            case MAP:
+                String MAP_LINK = "https://recyclemap.ru/";
+                System.out.println("Ссылка на карту: " + MAP_LINK);
+                break;
 
+            case RECYCLABILITY:
+                System.out.println("Введите код переработки: ");
+                int code = 0;
+                scanner.nextLine();
+                isRecycled(code);
+                break;
+
+            case BONUS:
+                System.out.println("Введите количество вторсырья, кг: ");
+                double weight = scanner.nextDouble();
+                double bal = weight < 10 ? weight * 10 : weight * 15;
+                System.out.printf("Количество бонусных баллов: %.2f.", bal);
+                break;
+
+        }
     }
 
     // добавьте модификаторы в заголовок метода
-    ...  void isRecycled(int code) {
+    public static void isRecycled(int code) {
         for (RecyclableMaterial material : materials) {
             if (material.getCode() == code) {
                 System.out.print("Это " + material.getDescription() + ". ");
@@ -44,7 +66,7 @@ public class Practicum {
     }
 
     // добавьте модификаторы в заголовок метода
-    ... HashMap<MaterialType, String> getContainers() {
+    public static HashMap<MaterialType, String> getContainers() {
         HashMap<MaterialType, String> containers = new HashMap<>();
         containers.put(MaterialType.PLASTIC, "Пластик");
         containers.put(MaterialType.METAL, "Металл");
@@ -97,7 +119,11 @@ public class Practicum {
     }
 }
 
-public class RecyclableMaterial {
+class RecyclableMaterial {
+    private final int code;
+    private final MaterialType type;
+    private final boolean isRecyclable;
+    private final String description;
 
     // объявите переменные с правильными модификаторами
 
@@ -125,14 +151,17 @@ public class RecyclableMaterial {
     }
 }
 
-// создайте перечисление MaterialType со следующими значениями:
-//    PLASTIC,
-//    METAL,
-//    GLASS,
-//    PAPER,
-//    UNSORTED_WASTE
+enum MaterialType {
+    PLASTIC,
+    METAL,
+    GLASS,
+    PAPER,
+    UNSORTED_WASTE
+}
 
-// создайте перечисление ChatCommand со следующими значениями:
-//    MAP,
-//    RECYCLABILITY,
-//    BONUS
+
+enum ChatCommand {
+    MAP,
+    RECYCLABILITY,
+    BONUS
+}
